@@ -73,9 +73,7 @@ title : The Hobbit: The Battle of the Five Armies
 writer : J.R.R. Tolkein
 year : 2012
 franchise : The Hobbit
-synopsis : Bilbo and Company are forced to engage in a war against an array of
-combatants and keep the Lonely Mountain from falling into the hands of a rising
-darkness.
+synopsis : Bilbo and Company are forced to engage in a war against an array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness.
 
 title : Pee Wee Herman's Big Adventure
 
