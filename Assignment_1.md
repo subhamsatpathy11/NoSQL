@@ -456,12 +456,13 @@ Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.remove({title:"
 
 ## Relationships
 
-Insert the following documents into a users collection
+Insert the following documents into a `users` collection
 
 ```
 username : GoodGuyGreg
 first_name : "Good Guy"
 last_name : "Greg"
+
 username : ScumbagSteve
 full_name :
  first : "Scumbag"
@@ -486,4 +487,88 @@ Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.users.insertMany([
     '1': ObjectId("61da85b9f1e258629fdd6f5b")
   }
 }
+```
+
+Insert the following documents into a `posts` collection
+
+```
+username : GoodGuyGreg
+title : Passes out at party
+body : Wakes up early and cleans house
+
+username : GoodGuyGreg
+title : Steals your identity
+body : Raises your credit score
+
+username : GoodGuyGreg
+title : Reports a bug in your code
+body : Sends you a Pull Request
+
+username : ScumbagSteve
+title : Borrows something
+body : Sells it
+
+username : ScumbagSteve
+title : Borrows everything
+body : The end
+
+username : ScumbagSteve
+title : Forks your repo on github
+body : Sets to private
+```
+
+```
+//create posts collection
+
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.createCollection('posts')
+{ ok: 1 }
+
+//insertion
+
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.posts.insertMany([
+... {username: 'GoodGuyGreg', title: 'Passes out at party', body: 'Wakes up early and cleans house'},
+... {username: 'GoodGuyGreg', title: 'Steals your identity', body: 'Raises your credit score'},
+... {username: 'GoodGuyGreg', title: 'Reports a bug in your code', body: 'Sends you a pull request'},
+... {username: 'ScumbagSteve', title: 'Borrows something', body: 'Sells it'},
+... {username: 'ScumbagSteve', title: 'Borrows everything', body: 'The end'},
+... {username: 'ScumbagSteve', title: 'Forks your repo in github', body: 'Sets to private'}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("61da896cf1e258629fdd6f5c"),
+    '1': ObjectId("61da896cf1e258629fdd6f5d"),
+    '2': ObjectId("61da896cf1e258629fdd6f5e"),
+    '3': ObjectId("61da896cf1e258629fdd6f5f"),
+    '4': ObjectId("61da896cf1e258629fdd6f60"),
+    '5': ObjectId("61da896cf1e258629fdd6f61")
+  }
+}
+```
+
+Insert the following documents into a `comments` collection
+
+```
+username : GoodGuyGreg
+comment : Hope you got a good deal!
+post : [post_obj_id]
+```
+
+where `[post_obj_id]` is the ObjectId of the `posts` document: "Borrows something"
+
+```
+//create comments collection
+
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.createCollection('comments')
+{ ok: 1 }
+
+//insertion with the post_id
+
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.insert(
+... {username:'GoodGuyGreg', comment: 'Hope you got a good deal!', post:ObjectId("61da896cf1e258629fdd6f5f")})
+DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany, or bulkWrite.
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("61da8b2ef1e258629fdd6f62") }
+}
+
 ```
