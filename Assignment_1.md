@@ -15,3 +15,8 @@ Using Mongosh:          1.1.7
 
 For mongosh info see: https://docs.mongodb.com/mongodb-shell/
 ```
+
+```
+Atlas atlas-2v2ryx-shard-0 [primary] myFirstDatabase> use mongodb_practice
+switched to db mongodb_practice
+```
