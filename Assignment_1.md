@@ -332,3 +332,158 @@ Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.update({title:'
   upsertedCount: 0
 }
 ```
+
+## Text Search
+
+1. find all movies that have a synopsis that contains the word "Bilbo"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({synopsis:{$regex:"Bilbo"}})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug.'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit',
+    synopsis: 'The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring.'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57db"),
+    title: 'The Hobbit: The Battle of the Five Armies',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'Bilbo and Company are forced to engage in a war against array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness'
+  }
+]
+```
+2. find all movies that have a synopsis that contains the word "Gandalf"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({synopsis:{$regex:"Gandalf"}})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit',
+    synopsis: 'The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring.'
+  }
+]
+```
+3. find all movies that have a synopsis that contains the word "Bilbo" and not the word "Gandalf"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({$and:[{synopsis:{$regex:"Bilbo"}}, {synopsis:{$not:/Gandalf/}}]})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug.'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57db"),
+    title: 'The Hobbit: The Battle of the Five Armies',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'Bilbo and Company are forced to engage in a war against array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness'
+  }
+]
+```
+4. find all movies that have a synopsis that contains the word "dwarves" or "hobbit"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({$or:[{synopsis:{$regex:"dwarves"}}, {synopsis:{$r$regex:"hobbit"}}]})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug.'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit',
+    synopsis: 'The dwarves, along with Bilbo Baggins and Gandalf the Grey, continue their quest to reclaim Erebor, their homeland, from Smaug. Bilbo Baggins is in possession of a mysterious and magical ring.'
+  }
+]
+```
+
+5. find all movies that have a synopsis that contains the word "gold" and "dragon"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({$and:[{synopsis:{$regex:"gold"}}, {synopsis:{$reg$regex:"dragon"}}]})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'A reluctant hobbit, Bilbo Baggins, sets out to the Lonely Mountain with a spirited group of dwarves to reclaim their mountain home - and the gold within it - from the dragon Smaug.'
+  }
+]
+```
+
+## Delete Documents
+
+1. delete the movie "Pee Wee Herman's Big Adventure"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.remove({title:"Pee Wee Herman's Big Adventure"})
+DeprecationWarning: Collection.remove() is deprecated. Use deleteOne, deleteMany, findOneAndDelete, or bulkWrite.
+{ acknowledged: true, deletedCount: 1 }
+```
+
+2. delete the movie "Avatar"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.remove({title:"Avatar"})
+{ acknowledged: true, deletedCount: 1 }
+```
+
+## Relationships
+
+Insert the following documents into a users collection
+
+```
+username : GoodGuyGreg
+first_name : "Good Guy"
+last_name : "Greg"
+username : ScumbagSteve
+full_name :
+ first : "Scumbag"
+ last : "Steve"
+
+```
+
+```
+//creating collection users
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.createCollection('users')
+{ ok: 1 }
+
+//insertion
+
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.users.insertMany([
+... {username: 'GoodGuyGreg',first_name: 'GoodGuy', last_name: 'Greg'},
+... {username: 'ScumbagSteve', fullname:{first:'Scumbag', last:'Steve'}}])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("61da85b9f1e258629fdd6f5a"),
+    '1': ObjectId("61da85b9f1e258629fdd6f5b")
+  }
+}
+```
