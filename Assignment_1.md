@@ -33,7 +33,6 @@ movies
 
 The documents that are to be inserted;
 
-```
 title : Fight Club
 writer : Chuck Palahniuko
 year : 1999
@@ -80,4 +79,4 @@ darkness.
 title : Pee Wee Herman's Big Adventure
 
 title : Avatar
-```
+
