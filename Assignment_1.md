@@ -572,3 +572,269 @@ DeprecationWarning: Collection.insert() is deprecated. Use insertOne, insertMany
 }
 
 ```
+```
+username : GoodGuyGreg
+comment : What's mine is yours!
+post : [post_obj_id]
+```
+
+where `[post_obj_id]` is the ObjectId of the `posts` document: "Borrows everything"
+
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.insert(
+... {username: 'GoodGuyGreg', comment: "What's mine is yours!", post:ObjectId("61da896cf1e258629fdd6f60")})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("61da8cd5f1e258629fdd6f64") }
+}
+```
+
+```username : GoodGuyGreg
+comment : Don't violate the licensing agreement!
+post : [post_obj_id]
+```
+
+where `[post_obj_id]` is the ObjectId of the `posts` document: "Forks your repo on github
+
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.insert(
+... {username: 'GoodGuyGreg', comment: "Don't violate the licensing agreement!", post:ObjectId("61da896cf1e258629fdd6f61")})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("61da8d6ef1e258629fdd6f65") }
+}
+```
+
+```
+username : ScumbagSteve
+comment : It still isn't clean
+post : [post_obj_id]
+```
+where `[post_obj_id]` is the ObjectId of the `posts` document: "Passes out at party"
+
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.insert(
+... {username: 'ScumbagSteve', comment: "It still isn't clean", post:ObjectId("61da896cf1e258629fdd6f5c")})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("61da8dfcf1e258629fdd6f66") }
+}
+```
+
+```
+username : ScumbagSteve
+comment : Denied your PR cause I found a hack
+post : [post_obj_id]
+```
+
+where `[post_obj_id]` is the ObjectId of the `posts` document: "Reports a bug in your code"
+
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.insert(
+... {username: 'ScumbagSteve', comment: "Denied your PR cause I found a hack",
+..... post:ObjectId("61da896cf1e258629fdd6f5e")})
+{
+  acknowledged: true,
+  insertedIds: { '0': ObjectId("61da8e8bf1e258629fdd6f67") }
+}
+```
+
+## Querying related Collections
+
+1. find all users
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.users.find().pretty()
+[
+  {
+    _id: ObjectId("61da85b9f1e258629fdd6f5a"),
+    username: 'GoodGuyGreg',
+    first_name: 'GoodGuy',
+    last_name: 'Greg'
+  },
+  {
+    _id: ObjectId("61da85b9f1e258629fdd6f5b"),
+    username: 'ScumbagSteve',
+    fullname: { first: 'Scumbag', last: 'Steve' }
+  }
+]
+```
+2. find all posts
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.posts.find().pretty()
+[
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5c"),
+    username: 'GoodGuyGreg',
+    title: 'Passes out at party',
+    body: 'Wakes up early and cleans house'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5d"),
+    username: 'GoodGuyGreg',
+    title: 'Steals your identity',
+    body: 'Raises your credit score'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5e"),
+    username: 'GoodGuyGreg',
+    title: 'Reports a bug in your code',
+    body: 'Sends you a pull request'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5f"),
+    username: 'ScumbagSteve',
+    title: 'Borrows something',
+    body: 'Sells it'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f60"),
+    username: 'ScumbagSteve',
+    title: 'Borrows everything',
+    body: 'The end'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f61"),
+    username: 'ScumbagSteve',
+    title: 'Forks your repo in github',
+    body: 'Sets to private'
+  }
+]
+```
+3. find all posts that was authored by "GoodGuyGreg"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.posts.find({username:"GoodGuyGreg"})
+[
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5c"),
+    username: 'GoodGuyGreg',
+    title: 'Passes out at party',
+    body: 'Wakes up early and cleans house'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5d"),
+    username: 'GoodGuyGreg',
+    title: 'Steals your identity',
+    body: 'Raises your credit score'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5e"),
+    username: 'GoodGuyGreg',
+    title: 'Reports a bug in your code',
+    body: 'Sends you a pull request'
+  }
+]
+```
+4. find all posts that was authored by "ScumbagSteve"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.posts.find({username:"ScumbagSteve"})
+[
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f5f"),
+    username: 'ScumbagSteve',
+    title: 'Borrows something',
+    body: 'Sells it'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f60"),
+    username: 'ScumbagSteve',
+    title: 'Borrows everything',
+    body: 'The end'
+  },
+  {
+    _id: ObjectId("61da896cf1e258629fdd6f61"),
+    username: 'ScumbagSteve',
+    title: 'Forks your repo in github',
+    body: 'Sets to private'
+  }
+]
+```
+5. find all comments
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.find().pretty()
+[
+  {
+    _id: ObjectId("61da8b2ef1e258629fdd6f62"),
+    username: 'GoodGuyGreg',
+    comment: 'Hope you got a good deal!',
+    post: ObjectId("61da896cf1e258629fdd6f5f")
+  },
+  {
+    _id: ObjectId("61da8cd5f1e258629fdd6f64"),
+    username: 'GoodGuyGreg',
+    comment: "What's mine is yours!",
+    post: ObjectId("61da896cf1e258629fdd6f60")
+  },
+  {
+    _id: ObjectId("61da8d6ef1e258629fdd6f65"),
+    username: 'GoodGuyGreg',
+    comment: "Don't violate the licensing agreement!",
+    post: ObjectId("61da896cf1e258629fdd6f61")
+  },
+  {
+    _id: ObjectId("61da8dfcf1e258629fdd6f66"),
+    username: 'ScumbagSteve',
+    comment: "It still isn't clean",
+    post: ObjectId("61da896cf1e258629fdd6f5c")
+  },
+  {
+    _id: ObjectId("61da8e8bf1e258629fdd6f67"),
+    username: 'ScumbagSteve',
+    comment: 'Denied your PR cause I found a hack',
+    post: ObjectId("61da896cf1e258629fdd6f5e")
+  }
+]
+```
+6. find all comments that was authored by "GoodGuyGreg"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.find({username:"GoodGuyGreg"})
+[
+  {
+    _id: ObjectId("61da8b2ef1e258629fdd6f62"),
+    username: 'GoodGuyGreg',
+    comment: 'Hope you got a good deal!',
+    post: ObjectId("61da896cf1e258629fdd6f5f")
+  },
+  {
+    _id: ObjectId("61da8cd5f1e258629fdd6f64"),
+    username: 'GoodGuyGreg',
+    comment: "What's mine is yours!",
+    post: ObjectId("61da896cf1e258629fdd6f60")
+  },
+  {
+    _id: ObjectId("61da8d6ef1e258629fdd6f65"),
+    username: 'GoodGuyGreg',
+    comment: "Don't violate the licensing agreement!",
+    post: ObjectId("61da896cf1e258629fdd6f61")
+  }
+]
+```
+7. find all comments that was authored by "ScumbagSteve"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.find({username:'ScumbagSteve'})
+[
+  {
+    _id: ObjectId("61da8dfcf1e258629fdd6f66"),
+    username: 'ScumbagSteve',
+    comment: "It still isn't clean",
+    post: ObjectId("61da896cf1e258629fdd6f5c")
+  },
+  {
+    _id: ObjectId("61da8e8bf1e258629fdd6f67"),
+    username: 'ScumbagSteve',
+    comment: 'Denied your PR cause I found a hack',
+    post: ObjectId("61da896cf1e258629fdd6f5e")
+  }
+]
+```
+8. find all comments belonging to the post "Reports a bug in your code"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.comments.find({post:ObjectId("61da896cf1e258629fdd6f5e")})
+[
+  {
+    _id: ObjectId("61da8e8bf1e258629fdd6f67"),
+    username: 'ScumbagSteve',
+    comment: 'Denied your PR cause I found a hack',
+    post: ObjectId("61da896cf1e258629fdd6f5e")
+  }
+]
+```
