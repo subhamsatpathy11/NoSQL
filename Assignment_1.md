@@ -101,3 +101,197 @@ Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.insertMany([{ti
   }
 }
 ```
+
+## Query/ Find Documents
+
+query the movies collection to
+
+1. get all documents
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find()
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d6"),
+    title: 'Fight Club',
+    writer: 'Chuck Palahniuko',
+    year: 1999,
+    actors: [ 'Brad Pitt', 'Edwrd Norton' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d7"),
+    title: 'Pulp Fiction',
+    writer: 'Quentin Tarantino',
+    year: 1994,
+    actors: [ 'John Travolta', 'Uma Thurman' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d8"),
+    title: 'Inglorious Basterds',
+    writer: 'Quentin Tarantino',
+    year: 2009,
+    actors: [ 'Brad Pitt', 'Diane Kruger', 'Eli Roth' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57db"),
+    title: 'The Hobbit: The Battle of the Five Armies',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'Bilbo and Company are forced to engage in a war against array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57dc"),
+    title: "Pee Wee Herman's Big Adventure"
+  },
+  { _id: ObjectId("61da79d7c4f4f44d993c57dd"), title: 'Avatar' }
+]
+```
+
+2. get all documents with writer set to "Quentin Tarantino"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({writer:"Quentin Tarantino"})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d7"),
+    title: 'Pulp Fiction',
+    writer: 'Quentin Tarantino',
+    year: 1994,
+    actors: [ 'John Travolta', 'Uma Thurman' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d8"),
+    title: 'Inglorious Basterds',
+    writer: 'Quentin Tarantino',
+    year: 2009,
+    actors: [ 'Brad Pitt', 'Diane Kruger', 'Eli Roth' ]
+  }
+]
+```
+
+3. get all documents where actors include "Brad Pitt"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({actors:"Brad Pitt"})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d6"),
+    title: 'Fight Club',
+    writer: 'Chuck Palahniuko',
+    year: 1999,
+    actors: [ 'Brad Pitt', 'Edwrd Norton' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d8"),
+    title: 'Inglorious Basterds',
+    writer: 'Quentin Tarantino',
+    year: 2009,
+    actors: [ 'Brad Pitt', 'Diane Kruger', 'Eli Roth' ]
+  }
+]
+```
+
+4. get all documents with franchise set to "The Hobbit"
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({franchise:"The Hobbit"})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57db"),
+    title: 'The Hobbit: The Battle of the Five Armies',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'Bilbo and Company are forced to engage in a war against array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness'
+  }
+]
+```
+
+5. get all movies released in the 90s
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({year:{$gt:1990, $lt:2000}})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d6"),
+    title: 'Fight Club',
+    writer: 'Chuck Palahniuko',
+    year: 1999,
+    actors: [ 'Brad Pitt', 'Edwrd Norton' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d7"),
+    title: 'Pulp Fiction',
+    writer: 'Quentin Tarantino',
+    year: 1994,
+    actors: [ 'John Travolta', 'Uma Thurman' ]
+  }
+]
+```
+
+6. get all movies released before the year 2000 or after 2010
+```
+Atlas atlas-2v2ryx-shard-0 [primary] mongodb_practice> db.movies.find({$or:[{year:{$gt:2010}},{year: {$lt:2000}}]})
+[
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d6"),
+    title: 'Fight Club',
+    writer: 'Chuck Palahniuko',
+    year: 1999,
+    actors: [ 'Brad Pitt', 'Edwrd Norton' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d7"),
+    title: 'Pulp Fiction',
+    writer: 'Quentin Tarantino',
+    year: 1994,
+    actors: [ 'John Travolta', 'Uma Thurman' ]
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57d9"),
+    title: 'The Hobbit: An Unexpected Journey',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57da"),
+    title: 'The Hobbit: The Desolation of Smaug',
+    writer: 'J.R.R Tolkein',
+    year: 2013,
+    franchise: 'The Hobbit'
+  },
+  {
+    _id: ObjectId("61da79d7c4f4f44d993c57db"),
+    title: 'The Hobbit: The Battle of the Five Armies',
+    writer: 'J.R.R Tolkein',
+    year: 2012,
+    franchise: 'The Hobbit',
+    synopsis: 'Bilbo and Company are forced to engage in a war against array of combatants and keep the Lonely Mountain from falling into the hands of a rising darkness'
+  }
+]
+```
